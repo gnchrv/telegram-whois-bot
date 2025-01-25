@@ -1,17 +1,29 @@
-/**
- * Composes a greeting message
- * @param name A name of a person to greet
- * @returns A greeting message
- */
-function greeting(name: string) {
-    return `Hello ${name}`
-}
+import 'dotenv/config'
+import { Bot, Context } from 'grammy'
 
-// Create a name of a person
-const name = 'Misha'
+// Intitialise a new bot
+const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN)
 
-// Compose a greeting message
-const message = greeting(name)
+// Configure the bot
+bot.use(async (context: Context) => {
 
-// Print the message to the console
-console.log(message)
+    // Extract the information about the author and the chat
+    const info = {
+        from: context.from,
+        chat: context.chat
+    }
+
+    // Stringify and format the information above
+    const infoStr = JSON.stringify(info, null, 2)
+
+    // Compose the message
+    let message = `<b>About You and This Chat</b>\n`
+    message += `Here’s the information shared with every bot you use, as well as details specific to this chat\n\n`
+    message += `<pre><code class="JSON">${infoStr}</code></pre>`
+
+    // Send the information back to the user
+    await context.reply(message, { parse_mode: 'HTML' })
+})
+
+// Launch the bot
+bot.start()
