@@ -6,11 +6,13 @@ import perfectionist from 'eslint-plugin-perfectionist'
 export default [
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
-    { languageOptions: { globals: globals.node } },
 
     {
         // A list of files to lint
         files: ['**/*.{js,mjs,cjs,ts}'],
+
+        // Add Node.js variables to the environment
+        languageOptions: { globals: globals.node },
 
         // Custom plugins
         plugins: { perfectionist },
